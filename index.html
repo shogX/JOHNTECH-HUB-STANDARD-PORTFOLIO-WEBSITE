@@ -1,47 +1,495 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>JOHNTECH | Web Developer & Designer</title>
-
-  <meta name="description" content="I design and build modern websites that 
-  convert visitors into clients. Web developer, graphic designer, and video editor.">
-
-  <meta name="keywords" content="web developer, graphic designer,
-   portfolio, frontend developer, nigeria developer">
-
+  <meta name="description" content="I design and build modern websites that convert visitors into clients. Web developer, graphic designer, and video editor.">
+  <meta name="keywords" content="web developer, graphic designer, portfolio, frontend developer, nigeria developer">
   <meta name="author" content="Johntech">
-
-  <!-- Open Graph (for sharing) -->
   <meta property="og:title" content="JOHNTECH Portfolio">
-  <meta property="og:description" content="Modern portfolio 
-  showcasing web development, design, and video editing work">
+  <meta property="og:description" content="Modern portfolio showcasing web development, design, and video editing work">
   <meta property="og:image" content="assets/images/preview.png">
-  
+  <meta property="og:url" content="https://johntech-portfolio.com">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" type="image/x-icon" href="assets/images/JOHNTECH LOGO.PNG">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
 
-</head>
-</head>
 <body>
-    <header>
-      <div class="logo">
+
+  <!-- ========== HEADER ========== -->
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+
+      <!-- Logo -->
+      <a href="#" class="logo" aria-label="Johntech Home">
         <img src="assets/images/JOHNTECH LOGO.PNG" alt="">
-      </div>
-      <nav class="menu-bar">
+        <span class="logo-john">JOHN</span><span class="logo-tech">TECH</span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="nav-desktop" aria-label="Main navigation">
         <ul>
-          <li><a href="">Home</a></li>
-          <li><a href="">About</a></li>
-          <li><a href="">Skills</a></li>
-          <li><a href="">Portfolio</a></li>
-          <li><a href="">Services</a></li>
-          <li><a href="">Contact</a></li>
+          <li><a href="#home" class="nav-link active">Home</a></li>
+          <li><a href="#about" class="nav-link">About</a></li>
+          <li><a href="#skills" class="nav-link">Skills</a></li>
+          <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
+          <li><a href="#services" class="nav-link">Services</a></li>
+          <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
       </nav>
-    </header>
 
-    <script src="assets/js/script.js"></script>
+      <!-- Hamburger (mobile) -->
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </div>
+
+    <!-- Mobile Nav -->
+    <nav class="nav-mobile" id="nav-mobile" aria-label="Mobile navigation">
+      <ul>
+        <li><a href="#home" class="nav-link">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
+        <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
+        <li><a href="#services" class="nav-link">Services</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="home">
+
+    <!-- Background image overlay -->
+    <div class="hero-bg">
+      <img src="assets/images/photo-1579882392185-581038fbc8c5.jpg" alt="" aria-hidden="true" class="hero-bg-img">
+      <div class="hero-overlay"></div>
+    </div>
+
+    <div class="hero-inner">
+
+      <!-- Left: Text content -->
+      <div class="hero-content">
+        <p class="hero-tagline">WEB DEVELOPER &bull; DESIGNER &bull; VIDEO EDITOR</p>
+
+        <h1 class="hero-heading">
+          I Design,
+          Build, and Edit
+          <span class="hero-gradient-text">Digital Experiences</span>
+        </h1>
+
+        <p class="hero-sub">
+          Transforming ideas into stunning websites, compelling
+          graphics, and engaging videos that leave a lasting impact.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#portfolio" class="btn btn-primary">
+            View My Work <span class="btn-arrow">→</span>
+          </a>
+          <a href="#contact" class="btn btn-outline">Contact Me</a>
+        </div>
+      </div>
+
+      <!-- Right: Avatar orb -->
+      <div class="hero-orb-wrap">
+        <div class="hero-orb-ring hero-orb-ring--outer"></div>
+        <div class="hero-orb-ring hero-orb-ring--mid"></div>
+        <div class="hero-orb">
+          <img src="assets/images/Hero-image.png" alt="">
+          <span class="orb-label">Creative Professional</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator" aria-hidden="true">
+      <div class="scroll-dot"></div>
+    </div>
+
+  </section>
+
+    <!-- ========== ABOUT ========== -->
+  <section class="about" id="about">
+    <div class="about-inner">
+
+      <!-- Section heading -->
+      <div class="section-heading">
+        <h2>About <span class="gradient-word">Me</span></h2>
+        <div class="heading-line"></div>
+      </div>
+
+      <!-- Two-column body -->
+      <div class="about-body">
+
+        <!-- Left: bio -->
+        <div class="about-left">
+          <h3 class="about-name">
+            Hi, I'm <span class="gradient-word">Olatunji Shogo John</span>
+          </h3>
+
+          <p class="about-para">
+            A passionate creative professional specializing in web development,
+            graphic design, and video editing. I bring ideas to life through clean
+            code, stunning visuals, and compelling stories.
+          </p>
+
+          <p class="about-para">
+            With expertise in modern web technologies and design tools, I create
+            digital experiences that not only look great but also deliver results.
+            Whether it's building responsive websites, crafting brand identities, or
+            producing engaging video content, I'm committed to excellence in
+            every project.
+          </p>
+
+          <!-- Skill pills -->
+          <div class="about-pills">
+            <span class="pill">HTML/CSS</span>
+            <span class="pill">JavaScript</span>
+            <span class="pill">PHP</span>
+            <span class="pill">Photoshop</span>
+            <span class="pill">Canva</span>
+          </div>
+        </div>
+
+        <!-- Right: service cards -->
+        <div class="about-right">
+
+          <div class="service-card">
+            <div class="service-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="service-title">Web Development</h4>
+              <p class="service-desc">Building responsive, modern websites with clean code</p>
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="service-title">Graphic Design</h4>
+              <p class="service-desc">Creating eye-catching visuals and brand identities</p>
+            </div>
+          </div>
+
+          <div class="service-card">
+            <div class="service-icon">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="service-title">Video Editing</h4>
+              <p class="service-desc">Producing engaging video content and advertisements</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- ========== SKILLS ========== -->
+  <section class="skills" id="skills">
+    <div class="skills-inner">
+
+      <!-- Heading -->
+      <div class="section-heading">
+        <h2>My <span class="gradient-word">Skills</span></h2>
+        <div class="heading-line"></div>
+        <p class="skills-subtitle">A diverse skillset across design, development, and video production</p>
+      </div>
+
+      <!-- Cards grid -->
+      <div class="skills-grid">
+
+        <!-- Development -->
+        <div class="skill-card">
+          <div class="skill-card-icon skill-icon--dev">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <h3 class="skill-card-title">Development</h3>
+          <div class="skill-bars">
+            <div class="skill-bar-item">
+              <div class="skill-bar-header"><span>HTML/CSS</span><span class="skill-pct skill-pct--purple">95%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill skill-fill--purple" style="--w:95%"></div></div>
+            </div>
+            <div class="skill-bar-item">
+              <div class="skill-bar-header"><span>JavaScript</span><span class="skill-pct skill-pct--purple">90%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill skill-fill--purple" style="--w:90%"></div></div>
+            </div>
+            <div class="skill-bar-item">
+              <div class="skill-bar-header"><span>PHP</span><span class="skill-pct skill-pct--purple">85%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill skill-fill--purple" style="--w:85%"></div></div>
+            </div>
+            <div class="skill-bar-item">
+              <div class="skill-bar-header"><span>React</span><span class="skill-pct skill-pct--purple">80%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill skill-fill--purple" style="--w:80%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Design -->
+        <div class="skill-card">
+          <div class="skill-card-icon skill-icon--design">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><path d="M8.56 2.75c4.37 6.03 6.02 9.42 8.03 17.72m2.54-15.38c-3.72 4.35-8.94 5.66-16.88 5.85m19.5 1.9c-3.5-.93-6.63-.82-8.94 0-2.58.92-5.01 2.86-7.44 6.32"/>
+            </svg>
+          </div>
+          <h3 class="skill-card-title">Design</h3>
+          <div class="skill-bars">
+            <div class="skill-bar-item">
+              <div class="skill-bar-header"><span>Photoshop</span><span class="skill-pct skill-pct--pink">90%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill skill-fill--pink" style="--w:90%"></div></div>
+            </div>
+            <div class="skill-bar-item">
+              <div class="skill-bar-header"><span>Canva</span><span class="skill-pct skill-pct--pink">95%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill skill-fill--pink" style="--w:95%"></div></div>
+            </div>
+            <div class="skill-bar-item">
+              <div class="skill-bar-header"><span>UI/UX Design</span><span class="skill-pct skill-pct--pink">85%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill skill-fill--pink" style="--w:85%"></div></div>
+            </div>
+            <div class="skill-bar-item">
+              <div class="skill-bar-header"><span>Branding</span><span class="skill-pct skill-pct--pink">88%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill skill-fill--pink" style="--w:88%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Video Editing -->
+        <div class="skill-card">
+          <div class="skill-card-icon skill-icon--video">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/>
+            </svg>
+          </div>
+          <h3 class="skill-card-title">Video Editing</h3>
+          <div class="skill-bars">
+            <div class="skill-bar-item">
+              <div class="skill-bar-header"><span>Video Editing</span><span class="skill-pct skill-pct--purple">92%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill skill-fill--purple" style="--w:92%"></div></div>
+            </div>
+            <div class="skill-bar-item">
+              <div class="skill-bar-header"><span>Motion Graphics</span><span class="skill-pct skill-pct--purple">85%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill skill-fill--purple" style="--w:85%"></div></div>
+            </div>
+            <div class="skill-bar-item">
+              <div class="skill-bar-header"><span>Color Grading</span><span class="skill-pct skill-pct--purple">80%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill skill-fill--purple" style="--w:80%"></div></div>
+            </div>
+            <div class="skill-bar-item">
+              <div class="skill-bar-header"><span>Audio Mixing</span><span class="skill-pct skill-pct--purple">78%</span></div>
+              <div class="skill-bar-track"><div class="skill-bar-fill skill-fill--purple" style="--w:78%"></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- ========== PORTFOLIO ========== -->
+  <section class="portfolio" id="portfolio">
+    <div class="portfolio-inner">
+
+      <!-- Heading -->
+      <div class="section-heading">
+        <h2>My <span class="gradient-word">Portfolio</span></h2>
+        <div class="heading-line"></div>
+        <p class="portfolio-subtitle">
+          A showcase of recent projects across web development, design, and video production
+        </p>
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="portfolio-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="web">Web Development</button>
+        <button class="filter-btn" data-filter="design">Graphic Design</button>
+        <button class="filter-btn" data-filter="video">Video Editing</button>
+      </div>
+
+      <!-- Cards grid -->
+      <div class="portfolio-grid">
+
+        <!-- Card 1 -->
+        <article class="port-card" data-category="web">
+          <div class="port-card-img-wrap">
+            <img src="assets/images/portfolio/ecommerce.jpg" alt="E-Commerce Platform" class="port-card-img" loading="lazy">
+            <span class="port-badge port-badge--purple">Web Development</span>
+            <div class="port-card-overlay">
+              <a href="#" target="_blank" rel="noopener" class="port-overlay-btn" aria-label="View E-Commerce Platform">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="port-card-body">
+            <h3 class="port-card-title">E-Commerce Platform</h3>
+            <p class="port-card-desc">Modern shopping experience with secure payment integration</p>
+            <div class="port-card-tags">
+              <span class="port-tag">React</span>
+              <span class="port-tag">PHP</span>
+              <span class="port-tag">MySQL</span>
+            </div>
+            <a href="#" target="_blank" rel="noopener" class="port-card-link">
+              View Project
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="port-card" data-category="design">
+          <div class="port-card-img-wrap">
+            <img src="assets/images/portfolio/branding.jpg" alt="Brand Identity Design" class="port-card-img" loading="lazy">
+            <span class="port-badge port-badge--pink">Graphic Design</span>
+            <div class="port-card-overlay">
+              <a href="#" target="_blank" rel="noopener" class="port-overlay-btn" aria-label="View Brand Identity Design">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="port-card-body">
+            <h3 class="port-card-title">Brand Identity Design</h3>
+            <p class="port-card-desc">Complete brand package including logo and marketing materials</p>
+            <div class="port-card-tags">
+              <span class="port-tag">Photoshop</span>
+              <span class="port-tag">Illustrator</span>
+            </div>
+            <a href="#" target="_blank" rel="noopener" class="port-card-link">
+              View Project
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="port-card" data-category="video">
+          <div class="port-card-img-wrap">
+            <img src="assets/images/portfolio/video-edit.jpg" alt="Product Advertisement" class="port-card-img" loading="lazy">
+            <span class="port-badge port-badge--purple">Video Editing</span>
+            <div class="port-card-overlay">
+              <a href="#" target="_blank" rel="noopener" class="port-overlay-btn" aria-label="View Product Advertisement">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="port-card-body">
+            <h3 class="port-card-title">Product Advertisement</h3>
+            <p class="port-card-desc">Engaging promotional video with motion graphics</p>
+            <div class="port-card-tags">
+              <span class="port-tag">Premiere Pro</span>
+              <span class="port-tag">After Effects</span>
+            </div>
+            <a href="#" target="_blank" rel="noopener" class="port-card-link">
+              View Project
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="port-card" data-category="web">
+          <div class="port-card-img-wrap">
+            <img src="assets/images/portfolio/web2.jpg" alt="Portfolio Website" class="port-card-img" loading="lazy">
+            <span class="port-badge port-badge--purple">Web Development</span>
+            <div class="port-card-overlay">
+              <a href="#" target="_blank" rel="noopener" class="port-overlay-btn" aria-label="View Portfolio Website">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="port-card-body">
+            <h3 class="port-card-title">Portfolio Website</h3>
+            <p class="port-card-desc">Clean responsive portfolio with smooth animations</p>
+            <div class="port-card-tags">
+              <span class="port-tag">HTML/CSS</span>
+              <span class="port-tag">JavaScript</span>
+            </div>
+            <a href="#" target="_blank" rel="noopener" class="port-card-link">
+              View Project
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 5 -->
+        <article class="port-card" data-category="design">
+          <div class="port-card-img-wrap">
+            <img src="assets/images/portfolio/design2.jpg" alt="Social Media Kit" class="port-card-img" loading="lazy">
+            <span class="port-badge port-badge--pink">Graphic Design</span>
+            <div class="port-card-overlay">
+              <a href="#" target="_blank" rel="noopener" class="port-overlay-btn" aria-label="View Social Media Kit">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="port-card-body">
+            <h3 class="port-card-title">Social Media Kit</h3>
+            <p class="port-card-desc">Cohesive social media templates and brand assets</p>
+            <div class="port-card-tags">
+              <span class="port-tag">Canva</span>
+              <span class="port-tag">Photoshop</span>
+            </div>
+            <a href="#" target="_blank" rel="noopener" class="port-card-link">
+              View Project
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <!-- Card 6 -->
+        <article class="port-card" data-category="video">
+          <div class="port-card-img-wrap">
+            <img src="assets/images/portfolio/video2.jpg" alt="Music Video Edit" class="port-card-img" loading="lazy">
+            <span class="port-badge port-badge--purple">Video Editing</span>
+            <div class="port-card-overlay">
+              <a href="#" target="_blank" rel="noopener" class="port-overlay-btn" aria-label="View Music Video Edit">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              </a>
+            </div>
+          </div>
+          <div class="port-card-body">
+            <h3 class="port-card-title">Music Video Edit</h3>
+            <p class="port-card-desc">High-energy edit with colour grading and visual effects</p>
+            <div class="port-card-tags">
+              <span class="port-tag">Premiere Pro</span>
+              <span class="port-tag">DaVinci</span>
+            </div>
+            <a href="#" target="_blank" rel="noopener" class="port-card-link">
+              View Project
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            </a>
+          </div>
+        </article>
+
+      </div>
+      <!-- end .portfolio-grid -->
+
+    </div>
+  </section>
+  <script src="assets/js/script.js"></script>
 </body>
+
 </html>
