@@ -121,28 +121,24 @@ const deleteJob = async (id) => {
 jobForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
+  const formData = new FormData();
+  formData.append('title', jobForm.title.value.trim());
+  formData.append('company', jobForm.company.value.trim());
+  formData.append('description', jobForm.description.value.trim());
+  formData.append('category', jobForm.category.value);
+  formData.append('link', jobForm.link.value.trim());
+  formData.append('featured', jobForm.featured.checked);
+
   const file = imageFileInput.files[0];
   const url = imageUrlInput.value.trim();
 
-  let image = '';
   if (file) {
-    // For now, just use a placeholder. In a real app, upload to cloud storage.
-    image = 'https://via.placeholder.com/640x400?text=Uploaded+Image';
+    formData.append('imageFile', file);
   } else if (url) {
-    image = url;
+    formData.append('imageUrl', url);
   }
 
-  const data = {
-    title: jobForm.title.value.trim(),
-    company: jobForm.company.value.trim(),
-    description: jobForm.description.value.trim(),
-    image: image,
-    category: jobForm.category.value,
-    link: jobForm.link.value.trim(),
-    featured: jobForm.featured.checked,
-  };
-
-  if (!data.title || !data.description) {
+  if (!formData.get('title') || !formData.get('description')) {
     alert('Please enter a title and description.');
     return;
   }
@@ -150,10 +146,7 @@ jobForm.addEventListener('submit', async (event) => {
   try {
     const response = await fetch(`${API_BASE}/api/jobs`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
+      body: formData,
     });
     if (!response.ok) {
       const error = await response.json();

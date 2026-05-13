@@ -1,7 +1,31 @@
 const express = require('express');
+const multer = require('multer');
 const Job = require('../models/Job');
 
 const router = express.Router();
+
+// Multer config (reuse from server.js or define here)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + require('path').extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'), false);
+    }
+  }
+});
 
 // Get all jobs
 router.get('/', async (req, res) => {
@@ -25,9 +49,23 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create a new job
-router.post('/', async (req, res) => {
+router.post('/', upload.single('imageFile'), async (req, res) => {
   try {
-    const newJob = new Job(req.body);
+    let image = req.body.imageUrl || '';
+    if (req.file) {
+      image = `/uploads/${req.file.filename}`;
+    }
+
+    const newJob = new Job({
+      title: req.body.title,
+      company: req.body.company,
+      description: req.body.description,
+      image: image,
+      category: req.body.category,
+      link: req.body.link,
+      featured: req.body.featured === 'true' || req.body.featured === true,
+    });
+
     const savedJob = await newJob.save();
     res.status(201).json(savedJob);
   } catch (error) {

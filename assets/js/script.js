@@ -1,4 +1,5 @@
 
+const API_BASE  = 'http://localhost:5001';
 const header    = document.getElementById('site-header');
 const hamburger = document.getElementById('hamburger');
 const navMobile = document.getElementById('nav-mobile');
@@ -12,7 +13,7 @@ window.addEventListener('scroll', () => {
   }
 });
 
-// ── Mobile menu toggle ─────────────────────
+// jjjjjjohn Mobile menu toggle jjjjjjjjjjjjjjjjjjohn
 hamburger.addEventListener('click', () => {
   const isOpen = hamburger.classList.toggle('open');
   navMobile.classList.toggle('open', isOpen);
@@ -117,7 +118,11 @@ const renderJobs = (jobs) => {
     const badge = job.category ? job.category : 'Job';
     const featuredClass = job.featured ? 'port-badge--purple' : 'port-badge--pink';
     const category = normalizeJobCategory(job.category);
-    const imageSrc = job.image || 'https://via.placeholder.com/640x400?text=Project+Image';
+    const imageSrc = job.image
+      ? job.image.startsWith('/')
+        ? `${API_BASE}${job.image}`
+        : job.image
+      : 'https://via.placeholder.com/640x400?text=Project+Image';
     return `
       <article class="port-card dynamic-job-card" data-category="${category}">
         <div class="port-card-img-wrap">
@@ -146,13 +151,16 @@ const loadJobs = async () => {
   portfolioGrid.insertAdjacentHTML('afterbegin', '<div class="jobs-empty">Loading jobs...</div>');
 
   try {
-    const response = await fetch('http://localhost:5001/api/jobs');
+    const response = await fetch(`${API_BASE}/api/jobs`);
+    if (!response.ok) {
+      throw new Error(`Unable to load jobs (${response.status})`);
+    }
     const jobs = await response.json();
     renderJobs(jobs);
   } catch (error) {
     console.error(error);
     portfolioGrid.querySelectorAll('.dynamic-job-card, .jobs-empty').forEach(card => card.remove());
-    portfolioGrid.insertAdjacentHTML('afterbegin', '<div class="jobs-empty">Unable to load jobs from the backend. Make sure the backend is running.</div>');
+    portfolioGrid.insertAdjacentHTML('afterbegin', `<div class="jobs-empty">Unable to load jobs from the backend. ${error.message}</div>`);
   }
 };
 

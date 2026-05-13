@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
+const multer = require('multer');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -22,6 +23,29 @@ if (!mongoUri) {
   process.exit(1);
 }
 
+// Multer config for image uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'), false);
+    }
+  }
+});
+
 // Security middleware
 app.enable('trust proxy');
 app.use(helmet());
@@ -35,8 +59,8 @@ const apiLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   message: { message: 'Too many requests, please try again later.' },
+  skip: (req) => nodeEnv !== 'production', // Skip in development
 });
-app.use('/api', apiLimiter);
 
 if (nodeEnv === 'production' && allowedOrigins.length > 0) {
   app.use(
@@ -54,12 +78,37 @@ if (nodeEnv === 'production' && allowedOrigins.length > 0) {
   app.use(cors());
 }
 
+// Rate limiting (only in production)
+if (nodeEnv === 'production') {
+  app.use('/api', apiLimiter);
+}
+
+// Serve uploaded images
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Models
 const Job = require('./models/Job');
 
 // Routes
 const jobsRouter = require('./routes/jobs');
+const heroRouter = require('./routes/hero');
+const aboutRouter = require('./routes/about');
+const skillsRouter = require('./routes/skills');
+const servicesRouter = require('./routes/services');
+const contactRouter = require('./routes/contact');
+const footerRouter = require('./routes/footer');
+const socialRouter = require('./routes/social');
+const settingsRouter = require('./routes/settings');
+
 app.use('/api/jobs', jobsRouter);
+app.use('/api/cms/hero', heroRouter);
+app.use('/api/cms/about', aboutRouter);
+app.use('/api/cms/skills', skillsRouter);
+app.use('/api/cms/services', servicesRouter);
+app.use('/api/cms/contact', contactRouter);
+app.use('/api/cms/footer', footerRouter);
+app.use('/api/cms/social', socialRouter);
+app.use('/api/cms/settings', settingsRouter);
 
 // Simple root homepage
 app.get('/', (req, res) => {
