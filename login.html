@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JOHNTECH HUB — Admin login</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    body { min-height: 100vh; display: grid; place-items: center; margin: 0; background: #06090f; color: #e2e8f0; font-family: Inter, system-ui, sans-serif; }
+    .card { width: min(420px, 92vw); padding: 28px; border-radius: 22px; background: rgba(15, 23, 42, 0.96); border: 1px solid rgba(148, 163, 184, 0.18); }
+    label { display: block; margin-bottom: 8px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.12em; color: #cbd5e1; }
+    input { width: 100%; padding: 14px 16px; border-radius: 14px; border: 1px solid rgba(148, 163, 184, 0.25); background: rgba(15, 23, 42, 0.95); color: #e2e8f0; box-sizing: border-box; }
+    button { margin-top: 16px; width: 100%; padding: 14px; border: none; border-radius: 999px; cursor: pointer; font-weight: 700; color: #fff; background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+    .err { color: #fecaca; margin-top: 12px; font-size: 0.9rem; }
+    a { color: #a5b4fc; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1 style="margin-top:0;">Admin login</h1>
+    <p style="color:#94a3b8;">Opens the dashboard with a JWT when your backend has <code>JWT_SECRET</code> and <code>ADMIN_PASSWORD</code> set.</p>
+    <form id="f">
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="username" required />
+      <label for="password" style="margin-top:14px;">Password</label>
+      <input id="password" type="password" autocomplete="current-password" required />
+      <button type="submit">Sign in</button>
+      <p id="err" class="err" style="display:none;"></p>
+    </form>
+    <p style="margin-top:18px;font-size:0.9rem;"><a href="dashboard.html">Back to dashboard</a></p>
+  </div>
+  <script>
+    const API_BASE = 'http://localhost:5000';
+    document.getElementById('f').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const err = document.getElementById('err');
+      err.style.display = 'none';
+      try {
+        const r = await fetch(API_BASE + '/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+          }),
+        });
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(data.message || 'Login failed');
+        localStorage.setItem('cms_token', data.token);
+        window.location.href = 'dashboard.html';
+      } catch (ex) {
+        err.textContent = ex.message;
+        err.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

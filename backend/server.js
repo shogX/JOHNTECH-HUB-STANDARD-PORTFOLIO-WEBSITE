@@ -5,7 +5,6 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
-const multer = require('multer');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -23,43 +22,19 @@ if (!mongoUri) {
   process.exit(1);
 }
 
-// Multer config for image uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed!'), false);
-    }
-  }
-});
-
-// Security middleware
 app.enable('trust proxy');
-app.use(helmet());
-app.use(express.json({ limit: '10kb' }));
-app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }));
+app.use(express.json({ limit: '2mb' }));
+app.use(express.urlencoded({ extended: true, limit: '2mb' }));
 app.use(morgan(nodeEnv === 'production' ? 'combined' : 'dev'));
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 100,
+  max: 200,
   standardHeaders: true,
   legacyHeaders: false,
   message: { message: 'Too many requests, please try again later.' },
-  skip: (req) => nodeEnv !== 'production', // Skip in development
+  skip: (req) => nodeEnv !== 'production',
 });
 
 if (nodeEnv === 'production' && allowedOrigins.length > 0) {
@@ -78,39 +53,35 @@ if (nodeEnv === 'production' && allowedOrigins.length > 0) {
   app.use(cors());
 }
 
-// Rate limiting (only in production)
 if (nodeEnv === 'production') {
   app.use('/api', apiLimiter);
 }
 
-// Serve uploaded images
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Models
-const Job = require('./models/Job');
+const { requireAuth } = require('./middleware/auth');
 
-// Routes
+const authRouter = require('./routes/auth');
 const jobsRouter = require('./routes/jobs');
-const heroRouter = require('./routes/hero');
-const aboutRouter = require('./routes/about');
 const skillsRouter = require('./routes/skills');
 const servicesRouter = require('./routes/services');
-const contactRouter = require('./routes/contact');
-const footerRouter = require('./routes/footer');
-const socialRouter = require('./routes/social');
+const messagesRouter = require('./routes/messages');
 const settingsRouter = require('./routes/settings');
+const analyticsRouter = require('./routes/analytics');
+const analyticsVisitRouter = require('./routes/analyticsVisit');
+const { router: mediaRouter } = require('./routes/media');
 
+app.use('/api/auth', authRouter);
+app.use('/api/analytics', analyticsVisitRouter);
+app.use('/api/messages', messagesRouter);
 app.use('/api/jobs', jobsRouter);
-app.use('/api/cms/hero', heroRouter);
-app.use('/api/cms/about', aboutRouter);
 app.use('/api/cms/skills', skillsRouter);
 app.use('/api/cms/services', servicesRouter);
-app.use('/api/cms/contact', contactRouter);
-app.use('/api/cms/footer', footerRouter);
-app.use('/api/cms/social', socialRouter);
 app.use('/api/cms/settings', settingsRouter);
+app.use('/api/settings', settingsRouter);
+app.use('/api/cms/analytics', requireAuth, analyticsRouter);
+app.use('/api/cms/media', requireAuth, mediaRouter);
 
-// Simple root homepage
 app.get('/', (req, res) => {
   res.send(`
     <html>
@@ -131,6 +102,7 @@ app.get('/', (req, res) => {
           <ul style="text-align:left; display:inline-block;">
             <li><a href="/api/ping">/api/ping</a></li>
             <li><a href="/api/jobs">/api/jobs</a></li>
+            <li><a href="/api/settings">/api/settings</a></li>
           </ul>
         </div>
       </body>
@@ -138,12 +110,10 @@ app.get('/', (req, res) => {
   `);
 });
 
-// Simple health check
 app.get('/api/ping', (req, res) => {
   res.json({ status: 'ok', timestamp: Date.now() });
 });
 
-// Connect to MongoDB and start server
 mongoose
   .connect(mongoUri, {
     useNewUrlParser: true,

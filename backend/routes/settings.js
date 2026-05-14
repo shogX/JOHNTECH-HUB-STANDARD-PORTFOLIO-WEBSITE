@@ -1,9 +1,23 @@
 const express = require('express');
 const Settings = require('../models/Settings');
+const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Get settings
+function flattenPatch(obj, prefix = '') {
+  const out = {};
+  if (!obj || typeof obj !== 'object') return out;
+  Object.entries(obj).forEach(([k, v]) => {
+    const p = prefix ? `${prefix}.${k}` : k;
+    if (v && typeof v === 'object' && !Array.isArray(v) && !(v instanceof Date)) {
+      Object.assign(out, flattenPatch(v, p));
+    } else {
+      out[p] = v;
+    }
+  });
+  return out;
+}
+
 router.get('/', async (req, res) => {
   try {
     let settings = await Settings.findOne();
@@ -16,17 +30,16 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Update settings
-router.put('/', async (req, res) => {
+router.put('/', requireAuth, async (req, res) => {
   try {
+    const patch = flattenPatch(req.body || {});
     let settings = await Settings.findOne();
     if (!settings) {
-      settings = await Settings.create(req.body);
-    } else {
-      Object.assign(settings, req.body);
-      await settings.save();
+      settings = await Settings.create({});
     }
-    res.json(settings);
+    await Settings.updateOne({ _id: settings._id }, { $set: patch });
+    const fresh = await Settings.findById(settings._id);
+    res.json(fresh);
   } catch (error) {
     res.status(400).json({ message: 'Settings update failed', error: error.message });
   }

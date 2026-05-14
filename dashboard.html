@@ -109,6 +109,40 @@
       border-color: rgba(99, 102, 241, 0.24);
     }
 
+    .sidebar-link-btn {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: #cbd5e1;
+      background: transparent;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .sidebar-link-btn:hover,
+    .sidebar-link-btn.active {
+      color: #fff;
+      background: rgba(99, 102, 241, 0.12);
+      border-color: rgba(99, 102, 241, 0.24);
+    }
+
+    .cms-tab-content {
+      display: none;
+    }
+
+    .cms-tab-content:not(.hidden) {
+      display: block;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
     .sidebar-footer {
       margin-top: auto;
     }
@@ -335,6 +369,28 @@
       box-shadow: 0 16px 35px rgba(124, 58, 237, 0.2);
     }
 
+    .cms-form {
+      display: grid;
+      gap: 24px;
+    }
+
+    .submit-btn {
+      padding: 14px 24px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(135deg, #8b5cf6, #ec4899);
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 35px rgba(124, 58, 237, 0.2);
+    }
+
     .jobs-card-header {
       display: flex;
       align-items: center;
@@ -413,6 +469,22 @@
   </style>
 </head>
 <body>
+  <div id="auth-overlay" class="hidden" style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(6,9,15,0.94);padding:24px;">
+    <form id="dash-login-form" style="width:min(420px,100%);padding:28px;border-radius:22px;background:rgba(15,23,42,0.96);border:1px solid rgba(148,163,184,0.18);display:grid;gap:14px;">
+      <h2 style="margin:0;color:#fff;">Admin sign-in</h2>
+      <p style="margin:0;color:#94a3b8;font-size:0.92rem;line-height:1.6;">Required when <code style="color:#cbd5e1;">JWT_SECRET</code> is set in your backend <code>.env</code>. Otherwise the dashboard stays open.</p>
+      <div class="form-row">
+        <label for="dash-email">Email</label>
+        <input id="dash-email" type="email" autocomplete="username" required />
+      </div>
+      <div class="form-row">
+        <label for="dash-password">Password</label>
+        <input id="dash-password" type="password" autocomplete="current-password" required />
+      </div>
+      <button type="submit" class="submit-btn">Sign in</button>
+      <p id="dash-login-err" style="margin:0;color:#fecaca;display:none;"></p>
+    </form>
+  </div>
   <div class="dashboard-shell">
     <aside class="sidebar">
       <div class="brand">
@@ -436,10 +508,45 @@
           <span class="item-label">Job List</span>
           <span class="item-icon"></span>
         </a>
-        <a href="#settings" class="sidebar-link">
-          <span class="item-label">Settings</span>
-          <span class="item-icon"></span>
-        </a>
+        
+        <div style="margin: 16px 0; padding: 12px 0; border-top: 1px solid rgba(148, 163, 184, 0.1); border-bottom: 1px solid rgba(148, 163, 184, 0.1);">
+          <p style="margin: 0 0 8px 0; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(148, 163, 184, 0.6); padding: 0 6px;">Portfolio CMS</p>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <button class="cms-tab-btn sidebar-link-btn" data-tab="hero" style="justify-content: flex-start;">
+              <span class="item-label">Hero Section</span>
+            </button>
+            <button class="cms-tab-btn sidebar-link-btn" data-tab="about" style="justify-content: flex-start;">
+              <span class="item-label">About</span>
+            </button>
+            <button class="cms-tab-btn sidebar-link-btn" data-tab="skills" style="justify-content: flex-start;">
+              <span class="item-label">Skills</span>
+            </button>
+            <button class="cms-tab-btn sidebar-link-btn" data-tab="services" style="justify-content: flex-start;">
+              <span class="item-label">Services</span>
+            </button>
+            <button class="cms-tab-btn sidebar-link-btn" data-tab="contact" style="justify-content: flex-start;">
+              <span class="item-label">Contact</span>
+            </button>
+            <button class="cms-tab-btn sidebar-link-btn" data-tab="footer" style="justify-content: flex-start;">
+              <span class="item-label">Footer</span>
+            </button>
+            <button class="cms-tab-btn sidebar-link-btn" data-tab="social" style="justify-content: flex-start;">
+              <span class="item-label">Social Media</span>
+            </button>
+            <button class="cms-tab-btn sidebar-link-btn" data-tab="settings" style="justify-content: flex-start;">
+              <span class="item-label">Settings</span>
+            </button>
+            <button class="cms-tab-btn sidebar-link-btn" data-tab="portfolio" style="justify-content: flex-start;">
+              <span class="item-label">Portfolio copy</span>
+            </button>
+            <button class="cms-tab-btn sidebar-link-btn" data-tab="media" style="justify-content: flex-start;">
+              <span class="item-label">Media library</span>
+            </button>
+            <button class="cms-tab-btn sidebar-link-btn" data-tab="analytics" style="justify-content: flex-start;">
+              <span class="item-label">Analytics</span>
+            </button>
+          </div>
+        </div>
       </nav>
 
       <div class="sidebar-footer">
@@ -449,7 +556,7 @@
 
     <main class="dashboard-main">
       <header class="topbar">
-        <div>
+        <div>i
           <span class="eyebrow">Dashboard</span>
           <h1>Welcome back, <span id="user-name">Admin</span></h1>
           <p>Manage your portfolio projects, upload images, and sync live jobs from the database in one professional dashboard.</p>
@@ -485,6 +592,7 @@
         </div>
 
         <form id="job-form">
+          <input type="hidden" id="editing-job-id" value="" />
           <div class="form-grid">
             <div class="form-row">
               <label for="title">Title</label>
@@ -507,9 +615,40 @@
             </div>
 
             <div class="form-row">
-              <label for="link">Project link</label>
+              <label for="link">Live / project link</label>
               <input type="url" id="link" name="link" placeholder="https://example.com" />
             </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="githubUrl">GitHub repo</label>
+              <input type="url" id="githubUrl" name="githubUrl" placeholder="https://github.com/user/repo" />
+            </div>
+            <div class="form-row">
+              <label for="liveUrl">Live preview URL</label>
+              <input type="url" id="liveUrl" name="liveUrl" placeholder="https://demo.example.com" />
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="technologies">Technologies (comma)</label>
+              <input type="text" id="technologies" name="technologies" placeholder="React, Node, MongoDB" />
+            </div>
+            <div class="form-row">
+              <label for="status">Status</label>
+              <select id="status" name="status">
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
+                <option value="archived">Archived</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="order">Sort order (lower first)</label>
+            <input type="number" id="order" name="order" value="0" />
           </div>
 
           <div class="form-grid">
@@ -521,6 +660,11 @@
               <label for="image-url">Or image URL</label>
               <input type="url" id="image-url" name="imageUrl" placeholder="https://example.com/image.jpg" />
             </div>
+          </div>
+
+          <div class="form-row">
+            <label for="gallery-files">Gallery images (optional, multiple)</label>
+            <input type="file" id="gallery-files" name="galleryFiles" accept="image/*" multiple />
           </div>
 
           <div class="image-preview" id="image-preview">
@@ -538,8 +682,12 @@
             </label>
           </div>
 
-          <div class="submit-row">
-            <button type="submit">Save project</button>
+          <div class="submit-row" style="justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <button type="button" class="submit-btn" style="background:rgba(148,163,184,0.25);" onclick="clearJobEdit()">Clear edit</button>
+            <div style="display:flex;gap:12px;flex-wrap:wrap;">
+              <button type="button" class="submit-btn" style="background:rgba(34,197,94,0.35);" onclick="saveJobOrder()">Save drag order</button>
+              <button type="submit">Save project</button>
+            </div>
           </div>
         </form>
       </section>
@@ -561,19 +709,503 @@
                 <th>Company</th>
                 <th>Image</th>
                 <th>Category</th>
+                <th>Status</th>
                 <th>Featured</th>
+                <th>Views</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody id="jobs-body">
-              <tr><td colspan="6" class="empty-state">Loading jobs...</td></tr>
+              <tr><td colspan="8" class="empty-state">Loading jobs...</td></tr>
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <!-- CMS HERO SECTION -->
+      <section id="tab-hero" class="cms-tab-content dashboard-card hidden">
+        <div class="jobs-card-header">
+          <div>
+            <h2>Hero Section</h2>
+            <p>Manage your hero banner, main heading, and call-to-action buttons.</p>
+          </div>
+        </div>
+        <form id="hero-form" class="cms-form">
+          <div class="form-row">
+            <label for="hero-mainHeading">Main Heading</label>
+            <input type="text" id="hero-mainHeading" placeholder="e.g., Crafting Digital Experiences" />
+          </div>
+          <div class="form-row">
+            <label for="hero-nameText">Name Text</label>
+            <input type="text" id="hero-nameText" placeholder="e.g., John Tech" />
+          </div>
+          <div class="form-row">
+            <label for="hero-introText">Intro Text</label>
+            <input type="text" id="hero-introText" placeholder="e.g., Full Stack Developer" />
+          </div>
+          <div class="form-row">
+            <label for="hero-description">Description</label>
+            <textarea id="hero-description" placeholder="Hero description text..."></textarea>
+          </div>
+          <div class="form-row">
+            <label for="hero-primaryButtonText">Primary Button Text</label>
+            <input type="text" id="hero-primaryButtonText" placeholder="e.g., Explore My Work" />
+          </div>
+          <div class="form-row">
+            <label for="hero-primaryButtonLink">Primary Button Link</label>
+            <input type="url" id="hero-primaryButtonLink" placeholder="e.g., #portfolio" />
+          </div>
+          <div class="form-row">
+            <label for="hero-resumeButtonText">Resume button text</label>
+            <input type="text" id="hero-resumeButtonText" placeholder="Download Resume" />
+          </div>
+          <div class="form-row">
+            <label for="hero-resumeLink">Resume file URL</label>
+            <input type="text" id="hero-resumeLink" placeholder="assets/JOHNTECH-Resume.pdf or /uploads/..." />
+          </div>
+          <div class="form-row">
+            <label for="hero-bgImage">Hero background image URL</label>
+            <input type="text" id="hero-bgImage" placeholder="assets/images/..." />
+          </div>
+          <div class="form-row">
+            <label for="hero-orbImage">Hero portrait image URL</label>
+            <input type="text" id="hero-orbImage" placeholder="assets/images/Hero-image.png" />
+          </div>
+          <div class="form-row">
+            <label for="hero-orbLabel">Floating label under portrait</label>
+            <input type="text" id="hero-orbLabel" placeholder="Freelancer Designer & Developer" />
+          </div>
+          <div class="form-row">
+            <label for="hero-floatingTags">Floating tags (comma separated)</label>
+            <input type="text" id="hero-floatingTags" placeholder="React, UI/UX, Open Source" />
+          </div>
+          <div class="form-row">
+            <label class="checkbox-label">
+              <input type="checkbox" id="hero-backgroundEffect" /> Enable background animation
+            </label>
+          </div>
+          <div class="form-row">
+            <button type="button" onclick="CMS.saveHeroData()" class="submit-btn">Save Hero Section</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- CMS ABOUT SECTION -->
+      <section id="tab-about" class="cms-tab-content dashboard-card hidden">
+        <div class="jobs-card-header">
+          <div>
+            <h2>About Section</h2>
+            <p>Edit your about page content and tech stack.</p>
+          </div>
+        </div>
+        <form id="about-form" class="cms-form">
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="about-section-title">Section title (first part)</label>
+              <input type="text" id="about-section-title" placeholder="About" />
+            </div>
+            <div class="form-row">
+              <label for="about-section-gradient">Gradient word</label>
+              <input type="text" id="about-section-gradient" placeholder="Me" />
+            </div>
+          </div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="about-name">Name in greeting</label>
+              <input type="text" id="about-name" placeholder="JOHN" />
+            </div>
+            <div class="form-row">
+              <label for="about-greeting-emoji">Greeting emoji</label>
+              <input type="text" id="about-greeting-emoji" placeholder="👋" />
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="about-bio1">Bio paragraph 1</label>
+            <textarea id="about-bio1" placeholder="First paragraph..."></textarea>
+          </div>
+          <div class="form-row">
+            <label for="about-bio2">Bio paragraph 2</label>
+            <textarea id="about-bio2" placeholder="Second paragraph..."></textarea>
+          </div>
+          <div class="form-row">
+            <label for="about-highlight-words">Highlighted words (comma separated)</label>
+            <input type="text" id="about-highlight-words" placeholder="JOHNTECH, Redux" />
+          </div>
+          <div class="form-row">
+            <label for="about-techStack">Tech stack pills (comma separated)</label>
+            <input type="text" id="about-techStack" placeholder="HTML/CSS, JavaScript, ReactJS..." />
+          </div>
+          <div class="form-row">
+            <label>Right column cards</label>
+            <div id="about-cards-editor" style="display:flex;flex-direction:column;gap:10px;"></div>
+            <button type="button" class="status-pill" onclick="CMS.addAboutCard()" style="margin-top:8px;cursor:pointer;">+ Add card</button>
+          </div>
+          <div class="form-row">
+            <button type="button" onclick="CMS.saveAboutData()" class="submit-btn">Save About Section</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- CMS SKILLS SECTION -->
+      <section id="tab-skills" class="cms-tab-content dashboard-card hidden">
+        <div class="jobs-card-header">
+          <div>
+            <h2>Skills</h2>
+            <p>Manage your professional skills and expertise levels.</p>
+          </div>
+          <button type="button" onclick="CMS.addSkill()" class="status-pill" style="cursor: pointer; background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.24); padding: 8px 16px; border-radius: 8px;">+ Add Skill</button>
+        </div>
+        <form id="skills-form" class="cms-form">
+          <div id="skills-list" style="display: flex; flex-direction: column; gap: 16px;">
+            <p style="color: rgba(148, 163, 184, 0.7);">Loading skills...</p>
+          </div>
+        </form>
+      </section>
+
+      <!-- CMS SERVICES SECTION -->
+      <section id="tab-services" class="cms-tab-content dashboard-card hidden">
+        <div class="jobs-card-header">
+          <div>
+            <h2>Services</h2>
+            <p>Showcase your professional services and offerings.</p>
+          </div>
+          <button type="button" onclick="CMS.addService()" class="status-pill" style="cursor: pointer; background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.24); padding: 8px 16px; border-radius: 8px;">+ Add Service</button>
+        </div>
+        <form id="services-form" class="cms-form">
+          <div id="services-list" style="display: flex; flex-direction: column; gap: 16px;">
+            <p style="color: rgba(148, 163, 184, 0.7);">Loading services...</p>
+          </div>
+        </form>
+      </section>
+
+      <!-- CMS CONTACT SECTION -->
+      <section id="tab-contact" class="cms-tab-content dashboard-card hidden">
+        <div class="jobs-card-header">
+          <div>
+            <h2>Contact Information</h2>
+            <p>Manage your contact details and contact form settings.</p>
+          </div>
+        </div>
+        <form id="contact-form" class="cms-form">
+          <div class="form-row">
+            <label for="contact-email">Email</label>
+            <input type="email" id="contact-email" placeholder="your.email@example.com" />
+          </div>
+          <div class="form-row">
+            <label for="contact-phone">Phone</label>
+            <input type="tel" id="contact-phone" placeholder="+1 (555) 123-4567" />
+          </div>
+          <div class="form-row">
+            <label for="contact-whatsapp">WhatsApp</label>
+            <input type="tel" id="contact-whatsapp" placeholder="+1 (555) 123-4567" />
+          </div>
+          <div class="form-row">
+            <label for="contact-address">Address</label>
+            <input type="text" id="contact-address" placeholder="Street address..." />
+          </div>
+          <div class="form-row">
+            <label for="contact-location">Location</label>
+            <input type="text" id="contact-location" placeholder="City, Country" />
+          </div>
+          <div class="form-row">
+            <label for="contact-eyebrow">Section eyebrow</label>
+            <input type="text" id="contact-eyebrow" placeholder="Let's Collaborate" />
+          </div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="contact-heading">Heading (include gradient word)</label>
+              <input type="text" id="contact-heading" placeholder="Get In Touch" />
+            </div>
+            <div class="form-row">
+              <label for="contact-heading-grad">Gradient word</label>
+              <input type="text" id="contact-heading-grad" placeholder="Touch" />
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="contact-intro">Intro paragraph</label>
+            <textarea id="contact-intro" rows="3" placeholder="Supporting text under heading"></textarea>
+          </div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="contact-cv-title">CV card title</label>
+              <input type="text" id="contact-cv-title" placeholder="Download CV" />
+            </div>
+            <div class="form-row">
+              <label for="contact-cv-btn">CV button text</label>
+              <input type="text" id="contact-cv-btn" placeholder="Download My CV" />
+            </div>
+          </div>
+          <div class="form-row">
+            <button type="button" onclick="CMS.saveContactData()" class="submit-btn">Save Contact Info</button>
+          </div>
+        </form>
+        <div id="contact-messages" style="margin-top: 32px;">
+          <h3>Messages</h3>
+          <div id="messages-list" style="display: flex; flex-direction: column; gap: 12px;">
+            <p style="color: rgba(148, 163, 184, 0.7);">Loading messages...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CMS FOOTER SECTION -->
+      <section id="tab-footer" class="cms-tab-content dashboard-card hidden">
+        <div class="jobs-card-header">
+          <div>
+            <h2>Footer</h2>
+            <p>Manage your footer content, links, and social icons.</p>
+          </div>
+        </div>
+        <form id="footer-form" class="cms-form">
+          <div class="form-row">
+            <label for="footer-description">Footer Description</label>
+            <textarea id="footer-description" placeholder="Your footer description..."></textarea>
+          </div>
+          <div class="form-row">
+            <label for="footer-copyright">Copyright Text</label>
+            <input type="text" id="footer-copyright" placeholder="© 2025 JOHNTECH HUB. All rights reserved." />
+          </div>
+          <div class="form-row">
+            <label for="footer-credit">Credit line (footer bottom)</label>
+            <input type="text" id="footer-credit" placeholder="Made with love by..." />
+          </div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="footer-quick-title">Quick links column title</label>
+              <input type="text" id="footer-quick-title" placeholder="Quick Links" />
+            </div>
+            <div class="form-row">
+              <label for="footer-services-title">Services column title</label>
+              <input type="text" id="footer-services-title" placeholder="Services" />
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="footer-service-tags">Footer service tags (comma separated)</label>
+            <input type="text" id="footer-service-tags" placeholder="Web development, UI/UX..." />
+          </div>
+          <div class="form-row">
+            <button type="button" onclick="CMS.saveFooterData()" class="submit-btn">Save Footer Info</button>
+          </div>
+        </form>
+        <div id="footer-links" style="margin-top: 32px;">
+          <h3>Footer Links</h3>
+          <div id="links-list" style="display: flex; flex-direction: column; gap: 12px;">
+            <p style="color: rgba(148, 163, 184, 0.7);">Loading links...</p>
+          </div>
+          <button type="button" onclick="CMS.addFooterLink()" class="status-pill" style="margin-top: 16px; cursor: pointer; background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.24); padding: 8px 16px; border-radius: 8px;">+ Add Link</button>
+        </div>
+      </section>
+
+      <!-- CMS SOCIAL MEDIA SECTION -->
+      <section id="tab-social" class="cms-tab-content dashboard-card hidden">
+        <div class="jobs-card-header">
+          <div>
+            <h2>Social Media</h2>
+            <p>Manage your social media profile URLs.</p>
+          </div>
+        </div>
+        <form id="social-form" class="cms-form">
+          <div class="form-row">
+            <label for="social-github">GitHub</label>
+            <input type="url" id="social-github" placeholder="https://github.com/yourusername" />
+          </div>
+          <div class="form-row">
+            <label for="social-linkedin">LinkedIn</label>
+            <input type="url" id="social-linkedin" placeholder="https://linkedin.com/in/yourusername" />
+          </div>
+          <div class="form-row">
+            <label for="social-instagram">Instagram</label>
+            <input type="url" id="social-instagram" placeholder="https://instagram.com/yourusername" />
+          </div>
+          <div class="form-row">
+            <label for="social-facebook">Facebook</label>
+            <input type="url" id="social-facebook" placeholder="https://facebook.com/yourusername" />
+          </div>
+          <div class="form-row">
+            <label for="social-twitter">Twitter</label>
+            <input type="url" id="social-twitter" placeholder="https://twitter.com/yourusername" />
+          </div>
+          <div class="form-row">
+            <label for="social-tiktok">TikTok</label>
+            <input type="url" id="social-tiktok" placeholder="https://tiktok.com/@yourusername" />
+          </div>
+          <div class="form-row">
+            <label for="social-youtube">YouTube</label>
+            <input type="url" id="social-youtube" placeholder="https://youtube.com/@yourchannel" />
+          </div>
+          <div class="form-row">
+            <button type="button" onclick="CMS.saveSocialData()" class="submit-btn">Save Social Media Links</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- CMS SETTINGS SECTION -->
+      <section id="tab-settings" class="cms-tab-content dashboard-card hidden">
+        <div class="jobs-card-header">
+          <div>
+            <h2>Site Settings</h2>
+            <p>Configure global site settings and preferences.</p>
+          </div>
+        </div>
+        <form id="settings-form" class="cms-form">
+          <div class="form-row">
+            <label for="settings-siteTitle">Site Title</label>
+            <input type="text" id="settings-siteTitle" placeholder="JOHNTECH HUB" />
+          </div>
+          <div class="form-row">
+            <label for="settings-siteDescription">Site Description</label>
+            <textarea id="settings-siteDescription" placeholder="A brief description of your portfolio..."></textarea>
+          </div>
+          <div class="form-row">
+            <label for="settings-primaryColor">Primary Color</label>
+            <input type="color" id="settings-primaryColor" />
+          </div>
+          <div class="form-row">
+            <label class="checkbox-label">
+              <input type="checkbox" id="settings-darkMode" /> Dark mode enabled
+            </label>
+          </div>
+          <div class="form-row">
+            <label for="settings-metaDescription">Meta Description</label>
+            <input type="text" id="settings-metaDescription" placeholder="SEO meta description..." />
+          </div>
+          <div class="form-row">
+            <label for="settings-metaKeywords">Meta Keywords</label>
+            <input type="text" id="settings-metaKeywords" placeholder="portfolio, developer, keywords..." />
+          </div>
+          <div class="form-row">
+            <label for="settings-ga">Google Analytics measurement ID</label>
+            <input type="text" id="settings-ga" placeholder="G-XXXXXXXXXX" />
+          </div>
+          <div class="form-grid">
+            <div class="form-row">
+              <label for="settings-favicon">Favicon URL</label>
+              <input type="text" id="settings-favicon" placeholder="assets/images/favicon.png" />
+            </div>
+            <div class="form-row">
+              <label for="settings-logo">Logo image URL</label>
+              <input type="text" id="settings-logo" placeholder="assets/images/JOHNTECH LOGO.PNG" />
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="settings-secondaryColor">Secondary accent</label>
+            <input type="color" id="settings-secondaryColor" />
+          </div>
+          <div class="form-row">
+            <label for="settings-skills-subtitle">Skills section subtitle</label>
+            <textarea id="settings-skills-subtitle" rows="2" placeholder="Subtitle under My Skills"></textarea>
+          </div>
+          <div class="form-row">
+            <label for="settings-services-subtitle">Services section subtitle</label>
+            <textarea id="settings-services-subtitle" rows="2" placeholder="Subtitle under My Services"></textarea>
+          </div>
+          <div class="form-row">
+            <label for="settings-section-order">Homepage section order (comma)</label>
+            <input type="text" id="settings-section-order" placeholder="hero,about,skills,portfolio,services,contact,footer" />
+          </div>
+          <div class="form-row">
+            <p style="margin:0 0 8px;color:#94a3b8;font-size:0.85rem;">Section visibility</p>
+            <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;color:#cbd5e1;font-size:0.9rem;">
+              <label class="checkbox-label"><input type="checkbox" id="sec-hero" checked /> Hero</label>
+              <label class="checkbox-label"><input type="checkbox" id="sec-about" checked /> About</label>
+              <label class="checkbox-label"><input type="checkbox" id="sec-skills" checked /> Skills</label>
+              <label class="checkbox-label"><input type="checkbox" id="sec-portfolio" checked /> Portfolio</label>
+              <label class="checkbox-label"><input type="checkbox" id="sec-services" checked /> Services</label>
+              <label class="checkbox-label"><input type="checkbox" id="sec-contact" checked /> Contact</label>
+              <label class="checkbox-label"><input type="checkbox" id="sec-footer" checked /> Footer</label>
+            </div>
+          </div>
+          <div class="form-row">
+            <button type="button" onclick="CMS.saveSettingsData()" class="submit-btn">Save Settings</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="tab-portfolio" class="cms-tab-content dashboard-card hidden">
+        <div class="jobs-card-header">
+          <div>
+            <h2>Portfolio section (copy)</h2>
+            <p>Subtitle, GitHub CTA, and filter buttons (advanced JSON).</p>
+          </div>
+        </div>
+        <div class="cms-form">
+          <div class="form-row">
+            <label for="portfolio-subtitle">Portfolio subtitle</label>
+            <textarea id="portfolio-subtitle" rows="3"></textarea>
+          </div>
+          <div class="form-row">
+            <label for="portfolio-github-url">GitHub profile URL</label>
+            <input type="url" id="portfolio-github-url" placeholder="https://github.com/username" />
+          </div>
+          <div class="form-row">
+            <label for="portfolio-github-cta">GitHub button text</label>
+            <input type="text" id="portfolio-github-cta" placeholder="View My GitHub Profile" />
+          </div>
+          <div class="form-row">
+            <label for="portfolio-filters-json">Filter buttons JSON</label>
+            <textarea id="portfolio-filters-json" rows="8" placeholder='[{"slug":"all","label":"All","order":0}]'></textarea>
+          </div>
+          <div class="form-row">
+            <button type="button" onclick="CMS.savePortfolioSectionData()" class="submit-btn">Save portfolio copy</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-media" class="cms-tab-content dashboard-card hidden">
+        <div class="jobs-card-header">
+          <div>
+            <h2>Media library</h2>
+            <p>Upload images or CV files to <code>/uploads</code> on the server.</p>
+          </div>
+        </div>
+        <div class="cms-form">
+          <div class="form-row">
+            <label for="media-search">Search filename</label>
+            <input type="text" id="media-search" placeholder="type and click refresh" />
+          </div>
+          <div class="form-row" style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button type="button" class="submit-btn" onclick="CMS.loadMediaLibrary()">Refresh list</button>
+          </div>
+          <div class="form-row">
+            <label for="media-file">Upload file</label>
+            <input type="file" id="media-file" />
+            <button type="button" class="submit-btn" style="margin-top:10px;" onclick="CMS.uploadMedia()">Upload</button>
+          </div>
+          <div id="media-list" style="display:flex;flex-direction:column;gap:10px;margin-top:16px;"></div>
+        </div>
+      </section>
+
+      <section id="tab-analytics" class="cms-tab-content dashboard-card hidden">
+        <div class="jobs-card-header">
+          <div>
+            <h2>Analytics</h2>
+            <p>High-level stats from your MongoDB data.</p>
+          </div>
+        </div>
+        <div class="overview-cards" style="margin-bottom:20px;">
+          <article class="stat-card"><p>Site visits</p><h2 id="an-visits">0</h2></article>
+          <article class="stat-card"><p>Projects</p><h2 id="an-projects">0</h2></article>
+          <article class="stat-card"><p>Messages</p><h2 id="an-messages">0</h2></article>
+        </div>
+        <div class="form-grid">
+          <div class="dashboard-card" style="padding:18px;">
+            <h3 style="margin-top:0;color:#fff;">Skills by category</h3>
+            <canvas id="chart-skills" height="220"></canvas>
+          </div>
+          <div class="dashboard-card" style="padding:18px;">
+            <h3 style="margin-top:0;color:#fff;">Totals</h3>
+            <canvas id="chart-totals" height="220"></canvas>
+          </div>
+        </div>
+        <div class="dashboard-card" style="padding:18px;margin-top:18px;">
+          <h3 style="margin-top:0;color:#fff;">Most viewed projects</h3>
+          <canvas id="chart-views" height="240"></canvas>
         </div>
       </section>
     </main>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="assets/js/dashboard.js"></script>
+  <script src="assets/js/cms.js"></script>
 </body>
 </html>

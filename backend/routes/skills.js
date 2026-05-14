@@ -1,20 +1,45 @@
 const express = require('express');
 const Skill = require('../models/Skill');
+const { requireAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Get all skills
 router.get('/', async (req, res) => {
   try {
-    const skills = await Skill.find().sort({ order: 1 });
+    const skills = await Skill.find().sort({ order: 1, createdAt: 1 });
     res.json(skills);
   } catch (error) {
     res.status(500).json({ message: 'Unable to load skills', error: error.message });
   }
 });
 
-// Create skill
-router.post('/', async (req, res) => {
+router.put(
+  '/reorder',
+  requireAuth,
+  async (req, res) => {
+    try {
+      const { skills } = req.body;
+      if (!Array.isArray(skills)) {
+        return res.status(400).json({ message: 'Invalid request body. Expected an array of skills with id and order.' });
+      }
+
+      const bulkOperations = skills.map((skill) => ({
+        updateOne: {
+          filter: { _id: skill.id },
+          update: { $set: { order: skill.order } },
+        },
+      }));
+
+      if (bulkOperations.length) await Skill.bulkWrite(bulkOperations);
+      res.json({ message: 'Skills reordered successfully' });
+    } catch (error) {
+      console.error('Error reordering skills:', error);
+      res.status(500).json({ message: 'Skill reordering failed', error: error.message });
+    }
+  }
+);
+
+router.post('/', requireAuth, async (req, res) => {
   try {
     const skill = new Skill(req.body);
     const savedSkill = await skill.save();
@@ -24,8 +49,20 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update skill
-router.put('/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
+  try {
+    const skill = await Skill.findById(req.params.id);
+    if (!skill) {
+      return res.status(404).json({ message: 'Skill not found' });
+    }
+    res.json(skill);
+  } catch (error) {
+    console.error('Error fetching skill:', error);
+    res.status(500).json({ message: 'Error fetching skill', error: error.message });
+  }
+});
+
+router.put('/:id', requireAuth, async (req, res) => {
   try {
     const skill = await Skill.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -41,8 +78,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Delete skill
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', requireAuth, async (req, res) => {
   try {
     const skill = await Skill.findByIdAndDelete(req.params.id);
     if (!skill) {
@@ -52,19 +88,6 @@ router.delete('/:id', async (req, res) => {
     res.json({ message: 'Skill deleted' });
   } catch (error) {
     res.status(500).json({ message: 'Skill delete failed', error: error.message });
-  }
-});
-
-// Reorder skills
-router.put('/reorder/all', async (req, res) => {
-  try {
-    const { skills } = req.body; // array of { id, order }
-    for (const item of skills) {
-      await Skill.findByIdAndUpdate(item.id, { order: item.order });
-    }
-    res.json({ message: 'Skills reordered' });
-  } catch (error) {
-    res.status(400).json({ message: 'Reorder failed', error: error.message });
   }
 });
 
