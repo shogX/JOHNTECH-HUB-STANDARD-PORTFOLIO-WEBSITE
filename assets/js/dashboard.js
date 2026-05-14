@@ -112,23 +112,308 @@ const updateImagePreview = () => {
 if (imageFileInput) imageFileInput.addEventListener('change', updateImagePreview);
 if (imageUrlInput) imageUrlInput.addEventListener('input', updateImagePreview);
 
-document.querySelectorAll('.sidebar-link').forEach((link) => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    document.querySelectorAll('.sidebar-link').forEach((l) => l.classList.remove('active'));
-    link.classList.add('active');
-    const target = link.getAttribute('href').substring(1);
-    document.getElementById(target)?.scrollIntoView({ behavior: 'smooth' });
+const toast = document.getElementById('toast');
+const pageEyebrow = document.getElementById('page-eyebrow');
+const pageTitle = document.getElementById('page-title');
+const pageDescription = document.getElementById('page-description');
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebar-toggle');
+
+const routeMap = {
+  overview: { sections: ['overview'], title: 'Overview', description: 'A premium enterprise CMS panel for managing your portfolio, visitors, and content with confidence.' },
+  portfolio: { sections: ['add-job', 'job-list'], title: 'Portfolio Management', description: 'Manage portfolio entries, featured projects, and drag-reorder table rows in one place.' },
+  hero: { sections: ['tab-hero'], title: 'Hero Management', description: 'Edit your hero banner, resume CTA, and floating tags with premium controls.' },
+  about: { sections: ['tab-about'], title: 'About Section', description: 'Update your about content, cards, experience and talent highlights.' },
+  skills: { sections: ['tab-skills'], title: 'Skills Manager', description: 'Manage skill cards, progress preview, categories and reorder workflows.' },
+  services: { sections: ['tab-services'], title: 'Services Manager', description: 'Create service packages, sort offerings, and keep your service catalog polished.' },
+  messages: { sections: ['tab-messages'], title: 'Contact Inbox', description: 'Review messages, manage read state, and keep your contact workflow efficient.' },
+  analytics: { sections: ['tab-analytics'], title: 'Analytics', description: 'Interactive charts for visits, projects, skills and visitor engagement.' },
+  settings: { sections: ['tab-settings'], title: 'Site Settings', description: 'Control SEO, theme preferences, social links and site branding safely.' },
+  portfolioText: { sections: ['tab-portfolio'], title: 'Portfolio Section', description: 'Update portfolio text, CTA labels and visual filter configuration.' },
+  media: { sections: ['tab-media'], title: 'Media Library', description: 'Upload files, search assets, and manage your media library.' },
+  social: { sections: ['tab-social'], title: 'Social Media', description: 'Manage social links for profiles and project channels.' },
+  footer: { sections: ['tab-footer'], title: 'Footer Content', description: 'Edit footer copy, links, and site credit details.' },
+};
+
+const cmsRoutes = ['hero', 'about', 'skills', 'services', 'messages', 'portfolioText', 'media', 'social', 'settings', 'footer'];
+
+const getRouteFromUrl = () => {
+  const hash = window.location.hash.replace('#', '');
+  if (hash) return hash;
+  const search = new URLSearchParams(window.location.search).get('page');
+  if (search) return search;
+  const pathSegment = window.location.pathname.replace(/\/$/, '').split('/').pop();
+  if (pathSegment && !pathSegment.match(/\.(html|php|aspx)$/i) && pathSegment !== 'dashboard') return pathSegment;
+  return 'overview';
+};
+
+const showToast = (message, type = 'base') => {
+  if (!toast) return;
+  toast.textContent = message;
+  toast.className = `toast toast-${type}`;
+  toast.classList.remove('hidden');
+  window.clearTimeout(toast.dismissTimer);
+  toast.dismissTimer = window.setTimeout(() => {
+    toast.classList.add('hidden');
+  }, 2600);
+};
+
+const setActiveRoute = (route) => {
+  document.querySelectorAll('.sidebar-link, .cms-tab-btn').forEach((item) => {
+    item.classList.toggle('active', item.dataset.route === route);
+  });
+};
+
+const hideAllViews = () => {
+  document.querySelectorAll('.page-view, .cms-tab-content').forEach((view) => view.classList.add('hidden'));
+};
+
+const updatePageHeader = (route) => {
+  const config = routeMap[route] || routeMap.overview;
+  if (pageEyebrow) pageEyebrow.textContent = config.title;
+  if (pageTitle) pageTitle.textContent = `${config.title}`;
+  if (pageDescription) pageDescription.textContent = config.description;
+};
+
+const pushRoute = (route) => {
+  if (window.location.protocol.startsWith('http')) {
+    const currentPath = window.location.pathname.replace(/\/$/, '');
+    const strippedPath = currentPath.replace(/\/(overview|portfolio|hero|about|skills|services|messages|analytics|settings|portfolioText|media|social|footer)$/, '');
+    const basePath = strippedPath.replace(/dashboard(?:\.html)?$/, 'dashboard').replace(/\/$/, '');
+    const targetUrl = `${basePath}/${route}`.replace(/\/\/+/, '/');
+    try {
+      history.pushState({}, '', targetUrl);
+      return;
+    } catch (error) {
+      console.warn('Route push failed, falling back to hash');
+    }
+  }
+  window.location.hash = route;
+};
+
+const showRoute = async (route) => {
+  const config = routeMap[route] || routeMap.overview;
+  hideAllViews();
+  setActiveRoute(route);
+  updatePageHeader(route);
+  config.sections.forEach((sectionId) => {
+    document.getElementById(sectionId)?.classList.remove('hidden');
+  });
+  await loadPageData(route);
+  if (window.innerWidth <= 980) sidebar?.classList.remove('open');
+  pushRoute(route);
+};
+
+const loadPageData = async (route) => {
+  switch (route) {
+    case 'overview':
+      await loadOverviewSummary();
+      break;
+    case 'portfolio':
+      await loadJobs();
+      break;
+    case 'analytics':
+      await loadAnalytics();
+      break;
+    case 'messages':
+      await loadMessages();
+      break;
+    case 'hero':
+    case 'about':
+    case 'skills':
+    case 'services':
+    case 'portfolioText':
+    case 'media':
+    case 'social':
+    case 'settings':
+    case 'footer':
+      if (typeof loadTabData === 'function') {
+        await loadTabData(route === 'messages' ? 'contact' : route === 'portfolioText' ? 'portfolio' : route);
+      }
+      break;
+    default:
+      break;
+  }
+};
+
+const routeButtons = document.querySelectorAll('.sidebar-link, .cms-tab-btn, .action-pill');
+routeButtons.forEach((button) => {
+  button.addEventListener('click', (event) => {
+    event.preventDefault();
+    const route = button.dataset.route;
+    if (!route) return;
+    showRoute(route);
   });
 });
+
+if (sidebarToggle) {
+  sidebarToggle.addEventListener('click', () => {
+    if (window.innerWidth <= 980) {
+      sidebar?.classList.toggle('open');
+    } else {
+      sidebar?.classList.toggle('collapsed');
+    }
+  });
+}
+
+window.addEventListener('popstate', () => {
+  const route = getRouteFromUrl();
+  showRoute(route);
+});
+
+showRoute(getRouteFromUrl());
 
 if (logoutBtn) {
   logoutBtn.addEventListener('click', () => {
     localStorage.removeItem('cms_token');
     showAuth();
-    alert('Signed out.');
+    showToast('Signed out successfully.', 'success');
   });
 }
+
+const loadOverviewSummary = async () => {
+  if (!(await probeAuth())) return;
+  try {
+    const response = await fetch(`${API_BASE}/api/cms/analytics/summary`, {
+      headers: authHeaders(),
+    });
+    if (!response.ok) return;
+    const data = await response.json();
+    if (totalJobsEl) totalJobsEl.textContent = data.totalProjects ?? 0;
+    if (featuredJobsEl) featuredJobsEl.textContent = data.totalSkills ?? 0;
+    if (remainingActionsEl) remainingActionsEl.textContent = data.totalMessages ?? 0;
+  } catch (error) {
+    console.warn('Unable to load overview summary', error);
+  }
+};
+
+const loadMessages = async () => {
+  const messagesBody = document.getElementById('messages-body');
+  if (!messagesBody) return;
+  messagesBody.innerHTML = '<tr><td colspan="6" class="empty-state">Loading messages…</td></tr>';
+  try {
+    if (!(await probeAuth())) return;
+    const response = await fetch(`${API_BASE}/api/messages`, { headers: authHeaders() });
+    if (!response.ok) throw new Error('Unable to fetch messages');
+    const messages = await response.json();
+    if (!Array.isArray(messages) || messages.length === 0) {
+      messagesBody.innerHTML = '<tr><td colspan="6" class="empty-state">No messages received yet.</td></tr>';
+      return;
+    }
+    messagesBody.innerHTML = messages
+      .map((message) => {
+        const status = message.status === 'read' ? 'Read' : 'Unread';
+        const readClass = message.status === 'read' ? 'status-pill' : 'status-pill active';
+        return `
+          <tr data-id="${message._id}">
+            <td>${message.name || 'Guest'}</td>
+            <td><a href="mailto:${message.email}" style="color:#a5f3fc;">${message.email}</a></td>
+            <td>${message.subject || message.message.slice(0, 38) + '...'}</td>
+            <td><span class="status-pill">${status}</span></td>
+            <td>${new Date(message.createdAt).toLocaleString()}</td>
+            <td class="job-actions">
+              <button type="button" data-id="${message._id}" class="mark-read-btn">Mark read</button>
+              <button type="button" data-id="${message._id}" class="delete-msg-btn">Delete</button>
+            </td>
+          </tr>`;
+      })
+      .join('');
+
+    document.querySelectorAll('.mark-read-btn').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const id = button.dataset.id;
+        try {
+          const resp = await fetch(`${API_BASE}/api/messages/${id}/read`, {
+            method: 'PATCH',
+            headers: authHeaders(true),
+          });
+          if (!resp.ok) throw new Error('Unable to mark read');
+          showToast('Message marked as read.', 'success');
+          await loadMessages();
+        } catch (error) {
+          showToast(error.message || 'Action failed', 'error');
+        }
+      });
+    });
+
+    document.querySelectorAll('.delete-msg-btn').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const id = button.dataset.id;
+        if (!confirm('Delete this message permanently?')) return;
+        try {
+          const resp = await fetch(`${API_BASE}/api/messages/${id}`, {
+            method: 'DELETE',
+            headers: authHeaders(true),
+          });
+          if (!resp.ok) throw new Error('Unable to delete message');
+          showToast('Message deleted.', 'success');
+          await loadMessages();
+        } catch (error) {
+          showToast(error.message || 'Delete failed', 'error');
+        }
+      });
+    });
+  } catch (error) {
+    messagesBody.innerHTML = `<tr><td colspan="6" class="empty-state">${error.message || 'Unable to load messages.'}</td></tr>`;
+  }
+};
+
+const loadAnalytics = async () => {
+  try {
+    if (!(await probeAuth())) return;
+    const response = await fetch(`${API_BASE}/api/cms/analytics/summary`, { headers: authHeaders() });
+    if (!response.ok) throw new Error('Unable to fetch analytics');
+    const summary = await response.json();
+    const visitsEl = document.getElementById('an-visits');
+    const projectsEl = document.getElementById('an-projects');
+    const messagesEl = document.getElementById('an-messages');
+    if (visitsEl) visitsEl.textContent = summary.portfolioVisits ?? 0;
+    if (projectsEl) projectsEl.textContent = summary.totalProjects ?? 0;
+    if (messagesEl) messagesEl.textContent = summary.totalMessages ?? 0;
+
+    const skillsChartEl = document.getElementById('chart-skills');
+    const totalsChartEl = document.getElementById('chart-totals');
+    const viewsChartEl = document.getElementById('chart-views');
+    const categories = Object.keys(summary.skillsByCategory || {});
+    const categoryValues = Object.values(summary.skillsByCategory || {});
+    const topProjects = summary.topProjects || [];
+
+    if (skillsChartEl) {
+      new Chart(skillsChartEl, {
+        type: 'doughnut',
+        data: {
+          labels: categories,
+          datasets: [{ data: categoryValues, backgroundColor: ['#8b5cf6', '#ec4899', '#6366f1', '#f59e0b', '#22c55e'] }],
+        },
+        options: { plugins: { legend: { labels: { color: '#cbd5e1' } } } },
+      });
+    }
+
+    if (totalsChartEl) {
+      new Chart(totalsChartEl, {
+        type: 'bar',
+        data: {
+          labels: ['Projects', 'Messages', 'Visits', 'Skills', 'Services'],
+          datasets: [{ data: [summary.totalProjects ?? 0, summary.totalMessages ?? 0, summary.portfolioVisits ?? 0, summary.totalSkills ?? 0, summary.totalServices ?? 0], backgroundColor: ['#8b5cf6', '#ec4899', '#38bdf8', '#f472b6', '#22c55e'] }],
+        },
+        options: { scales: { x: { ticks: { color: '#cbd5e1' } }, y: { ticks: { color: '#cbd5e1' } } }, plugins: { legend: { display: false } } },
+      });
+    }
+
+    if (viewsChartEl) {
+      new Chart(viewsChartEl, {
+        type: 'line',
+        data: {
+          labels: topProjects.map((project) => project.title || 'Project'),
+          datasets: [{ label: 'Views', data: topProjects.map((project) => project.views ?? 0), fill: true, backgroundColor: 'rgba(99, 102, 241, 0.18)', borderColor: '#8b5cf6', tension: 0.4 }],
+        },
+        options: { scales: { x: { ticks: { color: '#cbd5e1' } }, y: { ticks: { color: '#cbd5e1' } } }, plugins: { legend: { labels: { color: '#cbd5e1' } } } },
+      });
+    }
+  } catch (error) {
+    console.warn('Unable to load analytics', error);
+  }
+};
 
 const thumbUrl = (job) => {
   if (!job.image) return '<span style="color:#94a3b8;">No image</span>';

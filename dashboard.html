@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>JOHNTECH HUB Dashboard</title>
   <link rel="stylesheet" href="assets/css/style.css" />
-   <link rel="icon" type="image/x-icon" href="assets/images/JOHNTECH LOGO.PNG">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-ac2SE4j4Wb8yi1CbxRFuhsH5lZPny6wV6m1ycKf6ZFjXKngmOZ8kNxQPCnXgqUo1W1p0pE2cYnO82P5y5O9zUg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="icon" type="image/x-icon" href="assets/images/JOHNTECH LOGO.PNG">
   <style>
     :root {
       color-scheme: dark;
@@ -139,8 +140,111 @@
       display: block;
     }
 
+    .page-view {
+      display: block;
+    }
+
     .hidden {
       display: none !important;
+    }
+
+    .sidebar {
+      position: relative;
+      padding: 32px 22px;
+      width: 280px;
+      min-width: 280px;
+      background: rgba(15, 23, 42, 0.96);
+      border-right: 1px solid rgba(148, 163, 184, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      transition: width 0.3s ease, transform 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      width: 92px;
+      min-width: 92px;
+    }
+
+    .sidebar.collapsed .item-label,
+    .sidebar.collapsed .sidebar-section-title {
+      opacity: 0;
+      pointer-events: none;
+      width: 0;
+      overflow: hidden;
+    }
+
+    .sidebar.collapsed .sidebar-link,
+    .sidebar.collapsed .sidebar-link-btn {
+      justify-content: center;
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    .sidebar-toggle {
+      position: absolute;
+      top: 22px;
+      right: 22px;
+      border: none;
+      padding: 10px;
+      background: rgba(255,255,255,0.08);
+      color: #e2e8f0;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .sidebar-toggle:hover {
+      background: rgba(255,255,255,0.14);
+      transform: translateY(-1px);
+    }
+
+    .sidebar-section-title {
+      margin: 0;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(148, 163, 184, 0.7);
+      padding-left: 6px;
+      margin-bottom: 10px;
+    }
+
+    .sidebar-link,
+    .sidebar-link-btn {
+      gap: 12px;
+    }
+
+    .sidebar-link .item-icon,
+    .sidebar-link-btn .item-icon {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      color: #a5b4fc;
+      flex-shrink: 0;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .sidebar-link:hover .item-icon,
+    .sidebar-link.active .item-icon,
+    .sidebar-link-btn:hover .item-icon,
+    .sidebar-link-btn.active .item-icon {
+      background: rgba(99, 102, 241, 0.18);
+      color: #fff;
+    }
+
+    .sidebar-link:hover,
+    .sidebar-link.active,
+    .sidebar-link-btn:hover,
+    .sidebar-link-btn.active {
+      color: #fff;
+      background: rgba(99, 102, 241, 0.12);
+      border-color: rgba(99, 102, 241, 0.24);
+      transform: translateX(1px);
     }
 
     .sidebar-footer {
@@ -257,6 +361,127 @@
       padding: 32px;
       margin-bottom: 24px;
       box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
+    }
+
+    .quick-actions-card,
+    .activity-feed-card {
+      padding: 24px;
+    }
+
+    .quick-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    .action-pill {
+      border: 1px solid rgba(148, 163, 184, 0.16);
+      padding: 16px 18px;
+      border-radius: 18px;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.03);
+      cursor: pointer;
+      text-align: left;
+      font-weight: 700;
+      transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .action-pill:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      background: rgba(99, 102, 241, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .activity-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+      list-style: none;
+      padding: 0;
+    }
+
+    .activity-list li {
+      padding: 18px 20px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(148, 163, 184, 0.1);
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    .activity-time {
+      display: inline-block;
+      min-width: 92px;
+      color: #94a3b8;
+      font-size: 0.8rem;
+      margin-right: 8px;
+    }
+
+    .messages-table-wrap,
+    .jobs-table-wrap {
+      overflow-x: auto;
+      margin-top: 18px;
+    }
+
+    .messages-table-wrap table,
+    .jobs-table-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 780px;
+    }
+
+    .messages-table-wrap th,
+    .messages-table-wrap td,
+    .jobs-table-wrap th,
+    .jobs-table-wrap td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.08);
+      color: #cbd5e1;
+      text-align: left;
+    }
+
+    .messages-table-wrap th,
+    .jobs-table-wrap th {
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.75rem;
+    }
+
+    .messages-table-wrap td a {
+      color: #a5f3fc;
+      text-decoration: none;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      padding: 16px 22px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.96);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #fff;
+      z-index: 10000;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .toast.hidden {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+    }
+
+    .toast.toast-success {
+      border-color: #22c55e;
+      background: rgba(15, 23, 42, 0.96);
+    }
+
+    .toast.toast-error {
+      border-color: #ef4444;
+      background: rgba(15, 23, 42, 0.96);
     }
 
     .dashboard-card h2 {
@@ -444,6 +669,33 @@
       }
     }
 
+    @media (max-width: 980px) {
+      .sidebar {
+        position: fixed;
+        inset: 0 auto auto 0;
+        width: 280px;
+        height: 100vh;
+        transform: translateX(-100%);
+        z-index: 1001;
+        background: rgba(6, 9, 15, 0.98);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .dashboard-main {
+        padding-top: 120px;
+      }
+
+      .sidebar-toggle {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        z-index: 1100;
+      }
+    }
+
     @media (max-width: 780px) {
       .dashboard-main {
         padding: 20px;
@@ -485,67 +737,80 @@
       <p id="dash-login-err" style="margin:0;color:#fecaca;display:none;"></p>
     </form>
   </div>
+  <div id="toast" class="toast hidden"></div>
   <div class="dashboard-shell">
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
+      <button id="sidebar-toggle" class="sidebar-toggle" type="button" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars"></i>
+      </button>
       <div class="brand">
         <div class="brand-mark">J</div>
         <div>
           <h1 class="brand-title">JOHNTECH HUB</h1>
-          <p class="brand-subtitle">Portfolio admin panel</p>
+          <p class="brand-subtitle">Premium admin CMS</p>
         </div>
       </div>
 
       <nav class="sidebar-nav">
-        <a href="#overview" class="sidebar-link active">
+        <a href="#overview" class="sidebar-link active" data-route="overview">
+          <span class="item-icon"><i class="fa-solid fa-house"></i></span>
           <span class="item-label">Overview</span>
-          <span class="item-icon"></span>
         </a>
-        <a href="#add-job" class="sidebar-link">
-          <span class="item-label">Add Project</span>
-          <span class="item-icon"></span>
+        <a href="#portfolio" class="sidebar-link" data-route="portfolio">
+          <span class="item-icon"><i class="fa-solid fa-folder-open"></i></span>
+          <span class="item-label">Portfolio</span>
         </a>
-        <a href="#job-list" class="sidebar-link">
-          <span class="item-label">Job List</span>
-          <span class="item-icon"></span>
+        <a href="#messages" class="sidebar-link" data-route="messages">
+          <span class="item-icon"><i class="fa-solid fa-envelope"></i></span>
+          <span class="item-label">Messages</span>
         </a>
-        
-        <div style="margin: 16px 0; padding: 12px 0; border-top: 1px solid rgba(148, 163, 184, 0.1); border-bottom: 1px solid rgba(148, 163, 184, 0.1);">
-          <p style="margin: 0 0 8px 0; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(148, 163, 184, 0.6); padding: 0 6px;">Portfolio CMS</p>
-          <div style="display: flex; flex-direction: column; gap: 4px;">
-            <button class="cms-tab-btn sidebar-link-btn" data-tab="hero" style="justify-content: flex-start;">
-              <span class="item-label">Hero Section</span>
-            </button>
-            <button class="cms-tab-btn sidebar-link-btn" data-tab="about" style="justify-content: flex-start;">
-              <span class="item-label">About</span>
-            </button>
-            <button class="cms-tab-btn sidebar-link-btn" data-tab="skills" style="justify-content: flex-start;">
-              <span class="item-label">Skills</span>
-            </button>
-            <button class="cms-tab-btn sidebar-link-btn" data-tab="services" style="justify-content: flex-start;">
-              <span class="item-label">Services</span>
-            </button>
-            <button class="cms-tab-btn sidebar-link-btn" data-tab="contact" style="justify-content: flex-start;">
-              <span class="item-label">Contact</span>
-            </button>
-            <button class="cms-tab-btn sidebar-link-btn" data-tab="footer" style="justify-content: flex-start;">
-              <span class="item-label">Footer</span>
-            </button>
-            <button class="cms-tab-btn sidebar-link-btn" data-tab="social" style="justify-content: flex-start;">
-              <span class="item-label">Social Media</span>
-            </button>
-            <button class="cms-tab-btn sidebar-link-btn" data-tab="settings" style="justify-content: flex-start;">
-              <span class="item-label">Settings</span>
-            </button>
-            <button class="cms-tab-btn sidebar-link-btn" data-tab="portfolio" style="justify-content: flex-start;">
-              <span class="item-label">Portfolio copy</span>
-            </button>
-            <button class="cms-tab-btn sidebar-link-btn" data-tab="media" style="justify-content: flex-start;">
-              <span class="item-label">Media library</span>
-            </button>
-            <button class="cms-tab-btn sidebar-link-btn" data-tab="analytics" style="justify-content: flex-start;">
-              <span class="item-label">Analytics</span>
-            </button>
-          </div>
+        <a href="#analytics" class="sidebar-link" data-route="analytics">
+          <span class="item-icon"><i class="fa-solid fa-chart-line"></i></span>
+          <span class="item-label">Analytics</span>
+        </a>
+        <a href="#settings" class="sidebar-link" data-route="settings">
+          <span class="item-icon"><i class="fa-solid fa-gear"></i></span>
+          <span class="item-label">Settings</span>
+        </a>
+
+        <p class="sidebar-section-title">CMS Sections</p>
+        <div style="display: flex; flex-direction: column; gap: 4px;">
+          <button class="cms-tab-btn sidebar-link-btn" data-route="hero" data-tab="hero" type="button">
+            <span class="item-icon"><i class="fa-solid fa-rocket"></i></span>
+            <span class="item-label">Hero</span>
+          </button>
+          <button class="cms-tab-btn sidebar-link-btn" data-route="about" data-tab="about" type="button">
+            <span class="item-icon"><i class="fa-solid fa-file-lines"></i></span>
+            <span class="item-label">About</span>
+          </button>
+          <button class="cms-tab-btn sidebar-link-btn" data-route="skills" data-tab="skills" type="button">
+            <span class="item-icon"><i class="fa-solid fa-hammer"></i></span>
+            <span class="item-label">Skills</span>
+          </button>
+          <button class="cms-tab-btn sidebar-link-btn" data-route="services" data-tab="services" type="button">
+            <span class="item-icon"><i class="fa-solid fa-briefcase"></i></span>
+            <span class="item-label">Services</span>
+          </button>
+          <button class="cms-tab-btn sidebar-link-btn" data-route="messages" data-tab="contact" type="button">
+            <span class="item-icon"><i class="fa-solid fa-envelope"></i></span>
+            <span class="item-label">Messages</span>
+          </button>
+          <button class="cms-tab-btn sidebar-link-btn" data-route="portfolioText" data-tab="portfolio" type="button">
+            <span class="item-icon"><i class="fa-solid fa-images"></i></span>
+            <span class="item-label">Portfolio copy</span>
+          </button>
+          <button class="cms-tab-btn sidebar-link-btn" data-route="media" data-tab="media" type="button">
+            <span class="item-icon"><i class="fa-solid fa-photo-film"></i></span>
+            <span class="item-label">Media</span>
+          </button>
+          <button class="cms-tab-btn sidebar-link-btn" data-route="social" data-tab="social" type="button">
+            <span class="item-icon"><i class="fa-solid fa-globe"></i></span>
+            <span class="item-label">Social</span>
+          </button>
+          <button class="cms-tab-btn sidebar-link-btn" data-route="footer" data-tab="footer" type="button">
+            <span class="item-icon"><i class="fa-solid fa-flag-checkered"></i></span>
+            <span class="item-label">Footer</span>
+          </button>
         </div>
       </nav>
 
@@ -556,10 +821,10 @@
 
     <main class="dashboard-main">
       <header class="topbar">
-        <div>i
-          <span class="eyebrow">Dashboard</span>
-          <h1>Welcome back, <span id="user-name">Admin</span></h1>
-          <p>Manage your portfolio projects, upload images, and sync live jobs from the database in one professional dashboard.</p>
+        <div>
+          <span id="page-eyebrow" class="eyebrow">Dashboard Overview</span>
+          <h1 id="page-title">Welcome back, <span id="user-name">Admin</span></h1>
+          <p id="page-description">A premium enterprise CMS panel for managing your portfolio, visitors, and content with confidence.</p>
         </div>
         <div class="topbar-user">
           <span>Signed in as</span>
@@ -567,22 +832,53 @@
         </div>
       </header>
 
-      <section id="overview" class="overview-cards">
-        <article class="stat-card">
-          <p>Total projects</p>
-          <h2 id="total-jobs">0</h2>
-        </article>
-        <article class="stat-card">
-          <p>Featured projects</p>
-          <h2 id="featured-jobs">0</h2>
-        </article>
-        <article class="stat-card">
-          <p>Remaining actions</p>
-          <h2 id="remaining-actions">0</h2>
-        </article>
+      <section id="overview" class="page-view dashboard-card">
+        <div class="overview-cards">
+          <article class="stat-card">
+            <p>Total projects</p>
+            <h2 id="total-jobs">0</h2>
+          </article>
+          <article class="stat-card">
+            <p>Featured projects</p>
+            <h2 id="featured-jobs">0</h2>
+          </article>
+          <article class="stat-card">
+            <p>Remaining actions</p>
+            <h2 id="remaining-actions">0</h2>
+          </article>
+        </div>
+
+        <div class="dashboard-card quick-actions-card">
+          <div class="jobs-card-header">
+            <div>
+              <h2>Quick actions</h2>
+              <p>Access common admin workflows instantly and keep your portfolio operations fast.</p>
+            </div>
+          </div>
+          <div class="quick-actions-grid">
+            <button class="action-pill" data-route="portfolio">Manage portfolio</button>
+            <button class="action-pill" data-route="analytics">View analytics</button>
+            <button class="action-pill" data-route="messages">Review messages</button>
+            <button class="action-pill" data-route="settings">Update settings</button>
+          </div>
+        </div>
+
+        <div class="dashboard-card activity-feed-card">
+          <div class="jobs-card-header">
+            <div>
+              <h2>Recent activity</h2>
+              <p>Live activity from your admin actions, project updates and user interactions.</p>
+            </div>
+          </div>
+          <ul class="activity-list" id="activity-list">
+            <li><span class="activity-time">Just now</span> Project <strong>Portfolio Refresh</strong> completed.</li>
+            <li><span class="activity-time">2 hours ago</span> User message from <strong>jane@domain.com</strong> received.</li>
+            <li><span class="activity-time">Yesterday</span> Settings updated for <strong>SEO & theme</strong>.</li>
+          </ul>
+        </div>
       </section>
 
-      <section id="add-job" class="dashboard-card">
+      <section id="add-job" class="page-view dashboard-card hidden">
         <div class="jobs-card-header">
           <div>
             <h2>Add a new project</h2>
@@ -692,7 +988,7 @@
         </form>
       </section>
 
-      <section id="job-list" class="dashboard-card">
+      <section id="job-list" class="page-view dashboard-card hidden">
         <div class="jobs-card-header">
           <div>
             <h2>Project list</h2>
@@ -878,12 +1174,12 @@
         </form>
       </section>
 
-      <!-- CMS CONTACT SECTION -->
-      <section id="tab-contact" class="cms-tab-content dashboard-card hidden">
+      <!-- CMS MESSAGES SECTION -->
+      <section id="tab-messages" class="cms-tab-content dashboard-card hidden">
         <div class="jobs-card-header">
           <div>
-            <h2>Contact Information</h2>
-            <p>Manage your contact details and contact form settings.</p>
+            <h2>Contact & Messages</h2>
+            <p>Review inbox messages, manage contact details, and keep your site communication polished.</p>
           </div>
         </div>
         <form id="contact-form" class="cms-form">
@@ -939,10 +1235,30 @@
             <button type="button" onclick="CMS.saveContactData()" class="submit-btn">Save Contact Info</button>
           </div>
         </form>
-        <div id="contact-messages" style="margin-top: 32px;">
-          <h3>Messages</h3>
-          <div id="messages-list" style="display: flex; flex-direction: column; gap: 12px;">
-            <p style="color: rgba(148, 163, 184, 0.7);">Loading messages...</p>
+        <div id="contact-messages" class="dashboard-card" style="margin-top: 32px; padding: 24px;">
+          <div class="jobs-card-header">
+            <div>
+              <h3>Inbox</h3>
+              <p>Contact messages from your portfolio visitors. Mark read, reply, or delete without leaving the page.</p>
+            </div>
+            <button type="button" class="status-pill" onclick="loadMessages()" style="cursor: pointer;">Refresh inbox</button>
+          </div>
+          <div class="messages-table-wrap">
+            <table class="jobs-table" id="messages-table">
+              <thead>
+                <tr>
+                  <th>From</th>
+                  <th>Email</th>
+                  <th>Subject</th>
+                  <th>Status</th>
+                  <th>Received</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="messages-body">
+                <tr><td colspan="6" class="empty-state">Loading messages…</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
